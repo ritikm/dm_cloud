@@ -7,7 +7,7 @@ module DmCloud
     # or also download a media with the url paramater
     # and use it as the source to encode the ASSET_NAME listed in assets_names
     # Params :
-    #   args: 
+    #   args:
     #     url: SCHEME://USER:PASSWORD@HOSTNAME/MY/PATH/FILENAME.EXTENSION (could be ftp or http)
     #     author: an author name
     #     title: a title for the film
@@ -15,19 +15,19 @@ module DmCloud
     #       when you set this parameter you must also set the url parameter
     # Return :
     #   media_id: return the media id of the object
-    def self.create(options)
+    def self.create(url, assets_names = [], meta = {})
       call_type = "media.create"
 
       params = {
         :call =>  call_type,
-        args: Builder::Media.create(options)
+        args: Builder::Media.create(url, assets_names, meta)
       }
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
-    
+
     # Delete a media object with all its associated assets.
-    # 
-    # Parameters: 
+    #
+    # Parameters:
     #   id (media ID) – (required) the id of the media object you want to delete.
     # Return :
     #   Nothing
@@ -41,9 +41,9 @@ module DmCloud
       }
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
-    
+
     # Gives information about a given media object.
-    # 
+    #
     # Params :
     #   media_id: (media ID) – (required) the id of the new media object.
     #   fields (Array) – (required) the list of fields to retrieve.
@@ -59,12 +59,12 @@ module DmCloud
       }
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
-    
+
     # Returns a paginated list of media info structures.
     # You must specify the fields you want to retrieve.
     # The fields are described in the documentation of the method info.
-    # 
-    # Parameters: 
+    #
+    # Parameters:
     #   options:
     #     fields (Array) – (optional default return all informations) the fields to retrieve
     #     page (Integer) – (optional) the page number, default: 1
@@ -80,6 +80,6 @@ module DmCloud
       }
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
-    
+
   end
 end
