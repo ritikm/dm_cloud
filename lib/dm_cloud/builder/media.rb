@@ -16,7 +16,7 @@ module DmCloud
 
         request.rehash
       end
-      
+
       def self.info(media_id, assets_names = ['source'], fields = {})
         raise StandardError, "missing :media_id in params" unless media_id
         request = Hash.new
@@ -42,12 +42,12 @@ module DmCloud
           request = all_assets_fields(request, assets_names)
         else
           assets_names.each do |name|
-            fields[:assets].each { |value| request << "assets.#{name}.#{value.to_s}" }
+            fields[:assets].each { |value| request[:fields] << "assets.#{name}.#{value.to_s}" }
           end
         end
         request
       end
-      
+
       def self.list(page = 1, per_page = 10, fields = {})
         # raise StandardError, "missing :media_id in params" unless media_id
         request = Hash.new
@@ -68,7 +68,7 @@ module DmCloud
         # fields[:stats].each { |key| request << "meta.#{key.to_s}" } if fields[:meta].present?
         # request['stats'][COUNTRY_CODE][TIME_INTERVAL] : the statistics on the number of views in a specific country (eg: stats.fr.total, stats.us.last_week, etc...)
         # request['extended_stats'][COUNTRY_CODE][TIME_INTERVAL]
-        
+
         assets_names = ['source'] if assets_names.nil?
         if not fields[:assets]
           request = all_assets_fields(request, assets_names)

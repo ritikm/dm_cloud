@@ -20,15 +20,15 @@ module DmCloud
       #     width: (optional) the width for the video player frame
       #     height: (optional) the height for the video player frame
       # Result :
-      #   return a string which contain the signed url like 
+      #   return a string which contain the signed url like
       #   <iframe width="848" height="480" frameborder="0" scrolling="no" src="http://api.DmCloud.net/embed/<user_id>/<media_id>?auth=<auth_token>&skin=<skin_id>"></iframe>
       def self.embed(media_id, options = {}, security = {})
         raise StandardError, "missing :media_id in params" unless media_id
-        
+
         skin_id = options[:skin_id] ? options[:skin_id]  : 'modern1'
         width   = options[:width]   ? options[:width].to_s    : '848'
         height  = options[:height]  ? options[:height].to_s   : '480'
-        
+
         stream = EMBED_STREAM.dup
         stream.gsub!('[PROTOCOL]', DmCloud.config[:protocol])
         stream.gsub!('[USER_ID]', DmCloud.config[:user_key])
@@ -43,7 +43,7 @@ module DmCloud
 
         frame.html_safe
       end
-      
+
       # Get media url for direct link to the file on DailyMotion Cloud
       # Params :
       #   media_id: this is the id of the media (eg: 4c922386dede830447000009)
@@ -63,9 +63,18 @@ module DmCloud
         stream.gsub!('[MEDIA_ID]', media_id)
         stream.gsub!('[ASSET_NAME]', asset_name)
         stream.gsub!('[ASSET_EXTENSION]', asset_extension)
-        
+
         stream += '?auth=[AUTH_TOKEN]'.gsub!('[AUTH_TOKEN]', DmCloud::Signing.sign(stream, security))
         stream
+      end
+
+      # Gets the real URL that points to the download link on DMCloud's specific server
+      def self.download_url(media_id, asset_name, asset_extension = nil, security = {})
+        download_url = self.url(media_id, asset_name, asset_extension, security)
+        response = Net::HTTP.get_response(URI.parse(download_url))
+        download_url = response.header["location"]
+
+        download_url
       end
   end
 end

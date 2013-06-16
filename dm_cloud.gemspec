@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = "dm_cloud"
-  s.version = "0.2.0"
+  s.name = "dm_cloud_fixed"
+  s.version = "1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Jeremy Mortelette"]
-  s.date = "2012-11-26"
-  s.description = "This gem will simplify usage of DailyMotion Cloud API, it represent api in ruby style, with automated handler for search and upload files"
-  s.email = ["mortelette.jeremy@gmail.com"]
+  s.authors = ["Ritik Malhotra", "Tanooj Luthra"]
+  s.date = "2013-06-15"
+  s.description = "This gem will simplify usage of DailyMotion Cloud API. Originally authored by Jeremy Mortelette, modified by us to fix the bugs."
+  s.email = ["ritikmalhotra@gmail.com"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md"
