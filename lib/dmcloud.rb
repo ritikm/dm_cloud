@@ -5,11 +5,11 @@ require 'yaml'
 # For parts more generals and not representating DailyMotion Cloud API,
 # I add some about my own opinion.
 module DmCloud
-  
+
   # Configuration defaults
   # I used this parts from Slainer68 paybox_system gem.
   # I liked the concept and how he handle this part.
-  # Thx Slainer68, I created my first gem, 
+  # Thx Slainer68, I created my first gem,
   # and next one will be an update to your paybox_system gem.
   @@config = {
     security_level: 'none',

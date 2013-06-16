@@ -24,7 +24,7 @@ module DmCloud
 
       auth_token
     end
-    
+
     # To sign a URL, the client needs a secret shared with Dailymotion Cloud.
     # This secret is call client secret and is available in the back-office interface.
     # Params:
@@ -34,22 +34,22 @@ module DmCloud
     #   nonce: A 8 characters-long random alphanumeric lowercase string to make the signature unique.
     #   secret: The client secret.
     #   sec-data: If sec-level doesn’t have the DELEGATED bit activated,
-    #     this component contains concatenated informations 
+    #     this component contains concatenated informations
     #     for all activated sec levels.
     #   pub-sec-data: Some sec level data have to be passed in clear in the signature.
     #     To generate this component the parameters are serialized using x-www-form-urlencoded, compressed with gzip and encoded in base64.
     # Result :
-    #   return a string which contain the signed url like 
+    #   return a string which contain the signed url like
     #   <expires>-<sec>-<nonce>-<md5sum>[-<pub-sec-data>]
     def self.sign(stream, security_datas = nil)
       raise StandardError, "missing :stream in params" unless stream
       sec_level = security(DmCloud.config[:security_level])
       sec_data = security_data(DmCloud.config[:security_level], security_datas) unless security_datas.nil?
 
-      base = { 
+      base = {
         :sec_level => sec_level,
         :url_no_query => stream,
-        :expires => 1.hours.from_now.to_i,
+        :expires => Time.now + 1*60*60, # 1 hour from now
         :nonce => SecureRandom.hex(16)[0,16],
         :secret => DmCloud.config[:secret_key]
       }
@@ -60,13 +60,13 @@ module DmCloud
 
       signed_url = [base[:expires], base[:sec_level], base[:nonce], check_sum].compact
       signed_url.merge!(:pub_sec_data => sec_data) unless sec_data.nil?
-      
+
       # puts signed_url
-      
+
       signed_url = signed_url.join('-')
       signed_url
     end
-    
+
     # Prepare datas for signing
     # Params :
     #   base : contains media id and others for url signing
@@ -89,29 +89,29 @@ module DmCloud
     #       This security level may wrongly block some users
     #       which have their internet access load-balanced between several proxies.
     #       This is the case in some office network or some ISPs.
-    #     User-Agent: Used in addition to one of the two former levels, 
+    #     User-Agent: Used in addition to one of the two former levels,
     #       this level a limit on the exact user-agent of the end-user.
     #       This is more secure but in some specific condition may lead to wrongly blocked users.
     #     Use Once: The signed URL will only be usable once.
     #       Note: should not be used with stream URLs.
     #     Country: The URL can only be queried from specified countrie(s).
     #       The rule can be reversed to allow all countries except some.
-    #     Referer: The URL can only be queried 
+    #     Referer: The URL can only be queried
     #       if the Referer HTTP header contains a specified value.
     #       If the URL contains a Referer header with a different value,
     #       the request is refused. If the Referer header is missing,
-    #       the request is accepted in order to prevent from false positives as some browsers, 
+    #       the request is accepted in order to prevent from false positives as some browsers,
     #       anti-virus or enterprise proxies may remove this header.
-    #     Delegate: This option instructs the signing algorithm 
+    #     Delegate: This option instructs the signing algorithm
     #       that security level information won’t be embeded into the signature
     #       but gathered and lock at the first use.
     # Result :
-    #   Return a string which contain the signed url like 
+    #   Return a string which contain the signed url like
     #   http://cdn.DmCloud.net/route/<user_id>/<media_id>/<asset_name>.<asset_extension>?auth=<auth_token>
     def self.security(type = nil)
       type = :none unless type
       type = type.to_sym if type.class == String
-      
+
       case type
         when :none
           0 # None
@@ -153,7 +153,7 @@ module DmCloud
 
     def self.security_pub_sec_data(type, value)
       type = type.to_sym if type.class == String
-      
+
       case type
         when :country
           "cc=#{value}"  # A list of 2 characters long country codes in lowercase by comas. If the list starts with a dash, the rule is inverted (ie: cc=fr,gb,de or cc=-fr,it). This data have to be stored in pub-sec-data component
@@ -163,10 +163,10 @@ module DmCloud
           nil
       end
     end
-    
-    
+
+
     # This block comes from Cloudkey gem.
-    # I discovered this gem far after I start this one 
+    # I discovered this gem far after I start this one
     # and I will try to add file upload from http or ftp.
     # (Missing in their gem)
     def self.normalize params
@@ -179,7 +179,7 @@ module DmCloud
             params.to_s
           end
         end
-    
+
     # def self.normalize(params)
     #       str = params.to_json.to_s
     #       str.gsub!(/[^A-Za-z0-9]/, '')

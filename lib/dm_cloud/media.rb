@@ -57,6 +57,7 @@ module DmCloud
         :call =>  call_type,
         args: DmCloud::Builder::Media.info(media_id, assets_names, fields)
       }
+
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
 
@@ -81,5 +82,22 @@ module DmCloud
       DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
     end
 
+    # Gets a URL pointer to the actual file...
+    def self.url(media_id, asset_name)
+      raise StandardError, "missing :media_id in params" unless media_id
+      raise StandardError, "missing :asset_name in params" unless asset_name
+      fields = { :assets => ["download_url"] }
+
+      self.info(media_id, [asset_name], fields)["result"]["assets"][asset_name]["download_url"]
+    end
+
+    # Gets the real URL that points to the download link on DMCloud's specific server
+    def self.download_url(media_id, asset_name)
+      download_url = self.url(media_id, asset_name)
+      response = Net::HTTP.get_response(URI.parse(download_url))
+      download_url = response.header["location"]
+
+      download_url
+    end
   end
 end

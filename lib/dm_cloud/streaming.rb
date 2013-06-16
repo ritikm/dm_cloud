@@ -67,14 +67,5 @@ module DmCloud
         stream += '?auth=[AUTH_TOKEN]'.gsub!('[AUTH_TOKEN]', DmCloud::Signing.sign(stream, security))
         stream
       end
-
-      # Gets the real URL that points to the download link on DMCloud's specific server
-      def self.download_url(media_id, asset_name, asset_extension = nil, security = {})
-        download_url = self.url(media_id, asset_name, asset_extension, security)
-        response = Net::HTTP.get_response(URI.parse(download_url))
-        download_url = response.header["location"]
-
-        download_url
-      end
   end
 end

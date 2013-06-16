@@ -22,9 +22,10 @@ module DmCloud
         request = Hash.new
 
         # the media id
-        request[:fields] = []
+        request[:id] = media_id
 
         # requested media meta datas
+        request[:fields] = []
         fields[:meta] = ['title'] unless fields[:meta]
         fields[:meta].each { |value| request[:fields] << "meta.#{value.to_s}" }
         request[:fields] += ['id', 'created', 'embed_url', 'frame_ratio']

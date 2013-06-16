@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "dmcloud"
-  s.version = "1.0"
+  s.version = "1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ritik Malhotra", "Tanooj Luthra"]
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "dmcloud.gemspec",
-    "lib/dm_cloud.rb",
+    "lib/dmcloud.rb",
     "lib/dm_cloud/builder/media.rb",
     "lib/dm_cloud/media.rb",
     "lib/dm_cloud/request.rb",
