@@ -49,7 +49,7 @@ module DmCloud
     #   fields (Array) – (required) the list of fields to retrieve.
     # Returns:
     #   a multi-level structure containing about the media related to the requested fields.
-    def self.info(media_id, assets_names = ['source'], fields = {})
+    def self.info(media_id, assets_names = ['source'], authToken = false, fields = {})
       raise StandardError, "missing :media_id in params" unless media_id
       call_type = "media.info"
 
@@ -58,7 +58,11 @@ module DmCloud
         args: DmCloud::Builder::Media.info(media_id, assets_names, fields)
       }
 
-      DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
+      if authToken
+        return DmCloud::Signing.identify(params)
+      else
+        DmCloud.config[:auto_call] == true ? DmCloud::Request.execute(call_type, params) : {call: call_type, params: params}
+      end
     end
 
     # Returns a paginated list of media info structures.

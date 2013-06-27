@@ -25,7 +25,7 @@ module DmCloud
       request.content_type = 'application/json'
       request.body = params.to_json
 
-      # puts 'request (YAML format ): ' + request.to_yaml + "\n" + '-' * 80
+      #puts 'request (YAML format ): ' + request.to_yaml + "\n" + '-' * 80
 
       http.request(request).body
     end

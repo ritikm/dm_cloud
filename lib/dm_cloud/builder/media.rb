@@ -110,6 +110,7 @@ module DmCloud
             request[:fields] << "assets.#{name}.created"
             request[:fields] << "assets.#{name}.file_extension"
             request[:fields] << "assets.#{name}.file_size"
+            request[:fields] << "assets.#{name}.progress"
           end
           request
         end
