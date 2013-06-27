@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'digest'
 
 module DmCloud
   class Signing
