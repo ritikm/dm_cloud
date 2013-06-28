@@ -55,7 +55,7 @@ module DmCloud
 
       params = {
         :call =>  call_type,
-        args: DmCloud::Builder::Media.info(media_id, assets_names, fields)
+        args: DmCloud::Builder::Media.info(media_id, assets_names, fields, authToken)
       }
 
       if authToken
