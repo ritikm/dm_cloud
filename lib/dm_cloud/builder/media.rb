@@ -17,7 +17,7 @@ module DmCloud
         request.rehash
       end
 
-      def self.info(media_id, assets_names = ['source'], fields = {})
+      def self.info(media_id, assets_names = ['source'], fields = {}, authToken = false)
         raise StandardError, "missing :media_id in params" unless media_id
         request = Hash.new
 
@@ -28,10 +28,12 @@ module DmCloud
         request[:fields] = []
         fields[:meta] = ['title'] unless fields[:meta]
         fields[:meta].each { |value| request[:fields] << "meta.#{value.to_s}" }
-        request[:fields] += ['id', 'created', 'embed_url', 'frame_ratio']
-
+        if not authToken
+          request[:fields] += ['id', 'created', 'embed_url', 'frame_ratio']
+        end
         # the worldwide statistics on the number of views
         # request['fields'] << 'stats.global.last_week' if fields[:stats][:global]
+        # request['fields'] << 'assets.all.progress'
 
         # TODO: handle statistics request per country
         # fields[:stats].each { |key| request << "meta.#{key.to_s}" } if fields[:meta].present?

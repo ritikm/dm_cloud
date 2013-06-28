@@ -13,12 +13,13 @@ module DmCloud
       user_id  = DmCloud.config[:user_key]
       api_key  = DmCloud.config[:secret_key]
 
+      #puts request
       normalized_request = normalize(request).to_s
-      # puts 'identify:: normalized_values : ' + normalized_request + "\n" + '-' * 80
+      #puts 'identify:: normalized_values : ' + normalized_request + "\n" + '-' * 80
 
       params = user_id + normalized_request + api_key
 
-      # puts 'identify:: Values before MD5 encrypt  : ' + params + "\n" + '-' * 80
+      #puts 'identify:: Values before MD5 encrypt  : ' + params + "\n" + '-' * 80
 
       checksum = Digest::MD5.hexdigest(params)
       auth_token = user_id + ':' + checksum

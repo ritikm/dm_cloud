@@ -11,7 +11,6 @@ module DmCloud
     def self.execute(call, params = {})
       url = define(call)
       params['auth'] = DmCloud::Signing.identify(params)
-
       result = send_request(params)
       parse_response(result)
     end
@@ -24,6 +23,9 @@ module DmCloud
       request = Net::HTTP::Post.new(@uri.request_uri)
       request.content_type = 'application/json'
       request.body = params.to_json
+
+      #puts "Request body in send_request:"
+      #puts request.body
 
       #puts 'request (YAML format ): ' + request.to_yaml + "\n" + '-' * 80
 
